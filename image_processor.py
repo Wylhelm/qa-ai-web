@@ -1,8 +1,6 @@
 from PIL import Image
 import pytesseract
 import io
-import shutil
-import sys
 
 class ImageProcessor:
     def __init__(self):
