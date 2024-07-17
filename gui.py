@@ -39,6 +39,11 @@ class MainWindow(QMainWindow):
         self.system_prompt_button.clicked.connect(self.open_system_prompt_window)
         logo_layout.addWidget(self.system_prompt_button, alignment=Qt.AlignCenter)
 
+        # Scenario Prompt Button
+        self.scenario_prompt_button = QPushButton('Scenario')
+        self.scenario_prompt_button.clicked.connect(self.open_scenario_prompt_window)
+        logo_layout.addWidget(self.scenario_prompt_button, alignment=Qt.AlignCenter)
+
         # Prototype Logo
         self.prototype_logo_label = QLabel()
         prototype_logo_path = os.path.join(os.path.dirname(__file__), "prototype.png")
@@ -105,8 +110,12 @@ class MainWindow(QMainWindow):
         self.load_scenario_history()
 
     def open_system_prompt_window(self):
-        self.system_prompt_window = SystemPromptWindow(self.ai_processor)
+        self.system_prompt_window = SystemPromptWindow(self.ai_processor, 'system')
         self.system_prompt_window.show()
+
+    def open_scenario_prompt_window(self):
+        self.scenario_prompt_window = SystemPromptWindow(self.ai_processor, 'scenario')
+        self.scenario_prompt_window.show()
 
     def create_new_scenario(self):
         scenario_name, ok = QInputDialog.getText(self, 'New Scenario', 'Enter the scenario name:')
