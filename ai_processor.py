@@ -75,7 +75,7 @@ Test scenario:"""
 {self.scenario_prompt.format(criteria=criteria, combined_info=combined_info)}"""
 
         # Ensure the prompt is not truncated
-        max_prompt_length = 4096  # Adjust this value based on your LLM's maximum input length
+        max_prompt_length = 8192  # Adjust this value based on your LLM's maximum input length
         if len(prompt) > max_prompt_length:
             print(f"Warning: Prompt exceeds maximum length. Truncating to {max_prompt_length} characters.")
             prompt = prompt[:max_prompt_length]
