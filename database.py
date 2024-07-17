@@ -1,38 +1,53 @@
-import sqlite3
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 import json
-from test_scenario import TestScenario
+
+db = SQLAlchemy()
+
+class TestScenario(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    criteria = db.Column(db.Text, nullable=False)
+    scenario_text = db.Column(db.Text, nullable=False)
+    processed_files = db.Column(db.Text, nullable=False)
+    ui_elements = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'criteria': self.criteria,
+            'scenario_text': self.scenario_text,
+            'processed_files': json.loads(self.processed_files),
+            'ui_elements': json.loads(self.ui_elements),
+            'timestamp': self.timestamp.isoformat()
+        }
 
 class Database:
-    def __init__(self):
-        self.conn = sqlite3.connect('scenarios.db')
-        self.create_table()
-
-    def create_table(self):
-        cursor = self.conn.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS scenarios
-            (id INTEGER PRIMARY KEY, name TEXT, criteria TEXT, scenario TEXT, processed_files TEXT, ui_elements TEXT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)
-        ''')
-        self.conn.commit()
+    def __init__(self, app):
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scenarios.db'
+        db.init_app(app)
+        with app.app_context():
+            db.create_all()
 
     def save_scenario(self, test_scenario):
-        cursor = self.conn.cursor()
-        processed_files_json = json.dumps([{k: v for k, v in file.items() if k != 'image_data'} for file in test_scenario.processed_files])
-        cursor.execute('INSERT INTO scenarios (name, criteria, scenario, processed_files, ui_elements) VALUES (?, ?, ?, ?, ?)', 
-                       (test_scenario.name, test_scenario.criteria, test_scenario.scenario_text, processed_files_json, json.dumps(test_scenario.ui_elements)))
-        self.conn.commit()
+        new_scenario = TestScenario(
+            name=test_scenario.name,
+            criteria=test_scenario.criteria,
+            scenario_text=test_scenario.scenario_text,
+            processed_files=json.dumps(test_scenario.processed_files),
+            ui_elements=json.dumps(test_scenario.ui_elements)
+        )
+        db.session.add(new_scenario)
+        db.session.commit()
 
     def get_scenarios(self):
-        cursor = self.conn.cursor()
-        cursor.execute('SELECT * FROM scenarios ORDER BY timestamp DESC')
-        rows = cursor.fetchall()
-        return [TestScenario(row[1], row[2], row[3], json.loads(row[4])) for row in rows]
+        return TestScenario.query.order_by(TestScenario.timestamp.desc()).all()
 
     def clear_history(self):
-        cursor = self.conn.cursor()
-        cursor.execute('DELETE FROM scenarios')
-        self.conn.commit()
-        cursor.execute('VACUUM')  # This will reclaim the freed space
-    def get_scenario_by_criteria(self, criteria):
-        scenarios = self.get_scenarios()
-        return next((s for s in scenarios if s.criteria == criteria), None)
+        TestScenario.query.delete()
+        db.session.commit()
+
+    def get_scenario_by_id(self, scenario_id):
+        return TestScenario.query.get(scenario_id)
