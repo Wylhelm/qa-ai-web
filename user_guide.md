@@ -1,7 +1,7 @@
 # Test Scenario Generator - User Guide
 
 ## Introduction
-The Test Scenario Generator is an AI-powered desktop application designed to assist testers and QA professionals in creating comprehensive test scenarios. It analyzes UI designs, images, and documents to generate scenarios that adhere to the IEEE 829 standard. This guide will walk you through the main features and how to use the application effectively.
+The Test Scenario Generator is an AI-powered desktop application designed to assist testers and QA professionals in creating comprehensive test scenarios. It analyzes documents (Word, PDF, and text files) to generate scenarios that adhere to the IEEE 829 standard. This guide will walk you through the main features and how to use the application effectively.
 
 ## Getting Started
 1. Launch the Test Scenario Generator application.
@@ -18,7 +18,7 @@ The Test Scenario Generator is an AI-powered desktop application designed to ass
 
 ## Uploading Files
 1. Click the "Upload Files (Images/Documents)" button.
-2. Select one or more files (supported formats: PNG, JPG, JPEG, BMP, DOC, DOCX).
+2. Select one or more files (supported formats: DOC, DOCX, PDF, TXT).
 3. The application will analyze the files and extract relevant information.
 4. Extracted information will be automatically added to the criteria text area.
 5. If any errors occur during file analysis, you'll see a warning message with details.
@@ -44,14 +44,13 @@ The Test Scenario Generator is an AI-powered desktop application designed to ass
 
 ## Tips for Best Results
 - Provide clear and specific criteria for more accurate scenario generation.
-- Upload high-quality UI images for better analysis.
 - Include relevant documents that describe the functionality you want to test.
 - Review and adjust the automatically extracted information from uploaded files if necessary.
 
 ## Troubleshooting
 - If file analysis fails, ensure the file is not corrupted and is in a supported format.
 - Check the console output or error messages for more detailed information about any issues.
-- Verify that all required dependencies, including Tesseract OCR, are properly installed and configured.
+- Verify that all required dependencies are properly installed and configured.
 - Ensure that the local LLM server is running and accessible at http://localhost:1234.
 
 ## Quitting the Application

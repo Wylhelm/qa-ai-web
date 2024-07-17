@@ -1,14 +1,13 @@
 # Test Scenario Generator - Developer Guide
 
 ## Project Overview 
-The Test Scenario Generator is a PyQt5-based desktop application that leverages AI to analyze UI designs, images, and documents to automatically generate comprehensive test scenarios. It uses various AI services and libraries for image analysis, OCR, and natural language processing to create scenarios adhering to the IEEE 829 standard.
+The Test Scenario Generator is a PyQt5-based desktop application that leverages AI to analyze documents (Word, PDF, and text files) to automatically generate comprehensive test scenarios. It uses natural language processing to create scenarios adhering to the IEEE 829 standard.
 
 ## Project Structure
 - `main.py`: Entry point of the application
 - `gui.py`: Contains the main GUI implementation
 - `ai_processor.py`: Handles AI-related operations and scenario generation
 - `database.py`: Manages SQLite database operations
-- `image_processor.py`: Processes image files using OCR and other techniques
 - `test_scenario.py`: Defines the TestScenario class
 - `config.py`: Contains configuration settings (e.g., Azure AI Vision credentials)
 
@@ -16,7 +15,6 @@ The Test Scenario Generator is a PyQt5-based desktop application that leverages 
 1. Ensure Python 3.7+ is installed.
 2. Install dependencies: `pip install -r requirements.txt`
 3. Set up Azure AI Vision and update credentials in `config.py`.
-4. Install Tesseract OCR and ensure it's in the system PATH.
 5. Set up a local LLM server (e.g., using LM Studio) accessible at http://localhost:1234.
 
 ## Key Components
@@ -35,9 +33,6 @@ The Test Scenario Generator is a PyQt5-based desktop application that leverages 
 - Handles SQLite database operations for storing and retrieving scenarios.
 - Implements methods for saving, retrieving, and clearing scenario history.
 
-### ImageProcessor (image_processor.py)
-- Processes image files using OCR (Tesseract) and extracts UI elements.
-- Converts images to a format suitable for database storage.
 
 ### TestScenario (test_scenario.py)
 - Defines the data structure for test scenarios.
@@ -52,7 +47,7 @@ The Test Scenario Generator is a PyQt5-based desktop application that leverages 
 6. Generated scenario is displayed, saved to the database, and can be exported.
 
 ## Extending the Application
-- To add new file types for processing, extend the `process_file` method in `AIProcessor`.
+- To add new file types for processing, extend the `process_file` method in `AIProcessor` and create a corresponding processing method.
 - To modify the UI, update the `init_ui` method in `MainWindow`.
 - To change the database schema, update the `create_table` method in `Database` and adjust related methods.
 - To enhance image processing capabilities, modify the `ImageProcessor` class.
@@ -67,9 +62,7 @@ The Test Scenario Generator is a PyQt5-based desktop application that leverages 
 ## Troubleshooting
 - Ensure the local LLM server is running and accessible at http://localhost:1234.
 - Check the console output for error messages and stack traces.
-- Verify that Tesseract OCR is properly installed and in the system PATH.
 - Ensure all required dependencies are installed and up to date.
-- Check Azure AI Vision credentials and endpoint in `config.py`.
 
 ## Future Improvements
 - Implement user authentication and multi-user support.

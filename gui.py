@@ -116,7 +116,7 @@ class MainWindow(QMainWindow):
         self.upload_files_button.setEnabled(True)
 
     def upload_files(self):
-        file_names, _ = QFileDialog.getOpenFileNames(self, "Select Files", "", "Images/Documents (*.png *.jpg *.jpeg *.bmp *.doc *.docx)")
+        file_names, _ = QFileDialog.getOpenFileNames(self, "Select Files", "", "Documents (*.doc *.docx *.pdf *.txt)")
         if file_names:
             self.processed_files = []  # Clear previous processed files
             for file_name in file_names:

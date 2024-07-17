@@ -1,101 +1,43 @@
-from PIL import Image
-import cv2
-import pytesseract
-import numpy as np
-from azure.cognitiveservices.vision.computervision import ComputerVisionClient
-from msrest.authentication import CognitiveServicesCredentials
-from config import AZURE_VISION_ENDPOINT, AZURE_VISION_KEY
-import io
 import docx2txt
 import requests
+from PyPDF2 import PdfReader
 
 class AIProcessor:
     def __init__(self):
-        self.computervision_client = ComputerVisionClient(
-            AZURE_VISION_ENDPOINT, CognitiveServicesCredentials(AZURE_VISION_KEY)
-        )
-        # Remove the image_model initialization as it's not used
+        pass
 
     def process_file(self, file_path):
         file_extension = file_path.split('.')[-1].lower()
-        if file_extension in ['png', 'jpg', 'jpeg', 'bmp']:
-            return self._process_image(file_path)
-        elif file_extension in ['doc', 'docx']:
-            return self._process_document(file_path)
+        if file_extension in ['doc', 'docx']:
+            return self._process_word_document(file_path)
+        elif file_extension == 'pdf':
+            return self._process_pdf_document(file_path)
+        elif file_extension == 'txt':
+            return self._process_text_file(file_path)
         else:
             return {"error": "Unsupported file type"}
 
-    def _process_image(self, image_path):
-        try:
-            try:
-                image = Image.open(image_path)
-                if image.mode != "RGB":
-                    image = image.convert("RGB")
-                image = Image.open(image_path)
-                if image.mode != "RGB":
-                    image = image.convert("RGB")
-                image = Image.open(image_path).convert("RGB")
-            except Exception as e:
-                return {
-                    "error": f"Failed to open or convert image: {str(e)}",
-                    "debug_info": f"Image path: {image_path}, Image mode: {image.mode}, Exception: {str(e)}"
-                }
-            
-            
-            try:
-                # Image preprocessing using OpenCV and OCR using Tesseract
-                image_cv = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
-                gray = cv2.cvtColor(image_cv, cv2.COLOR_BGR2GRAY)
-                _, binary = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-
-                # OCR using Tesseract
-                ocr_text = pytesseract.image_to_string(binary)
-                # Generate image description using Azure AI Vision
-                image_stream = io.BytesIO()
-                image.save(image_stream, format='PNG')
-                image_stream.seek(0)
-
-                analysis = self.computervision_client.analyze_image_in_stream(
-                    image_stream, visual_features=["Description", "Tags", "Objects", "Categories"]
-                )
-
-                # Extract detailed information
-                image_description = "No description detected."
-                if analysis.description and analysis.description.captions:
-                    image_description = analysis.description.captions[0].text
-
-                tags = ", ".join([tag.name for tag in analysis.tags]) if analysis.tags else "No tags detected."
-                objects = ", ".join([f"{obj.object_property} (confidence: {obj.confidence:.2f})" for obj in analysis.objects]) if analysis.objects else "No objects detected."
-                categories = ", ".join([f"{cat.name} (confidence: {cat.score:.2f})" for cat in analysis.categories]) if analysis.categories else "No categories detected."
-
-                detailed_info = f"Description: {image_description}\nTags: {tags}\nObjects: {objects}\nCategories: {categories}"
-                print(f"Detailed image information: {detailed_info}")
-                print(f"OCR text: {ocr_text.strip()}")
-            except Exception as e:
-                return {
-                    "error": f"Failed to process OCR: {str(e)}",
-                    "debug_info": f"Image path: {image_path}, Image mode: {image.mode}, Exception: {str(e)}"
-                }
-            
-            extracted_info = f"Image Description: {image_description}\nOCR Text: {ocr_text}"
-            
-            return {
-                "extracted_info": extracted_info,
-                "image_description": image_description,
-                "ocr_text": ocr_text
-            }
-        except Exception as e:
-            print(f"Error processing image: {e}")
-            return {
-                "error": f"Failed to process image: {str(e)}",
-                "extracted_info": "No information could be extracted due to an error.",
-                "debug_info": f"Image path: {image_path}"
-            }
-
-    def _process_document(self, doc_path):
+    def _process_word_document(self, doc_path):
         text = docx2txt.process(doc_path)
         return {
-            "extracted_info": f"Document content:\n{text[:500]}..."  # Limit to first 500 characters
+            "extracted_info": f"Word Document content:\n{text[:500]}..."  # Limit to first 500 characters
+        }
+
+    def _process_pdf_document(self, pdf_path):
+        with open(pdf_path, 'rb') as file:
+            pdf_reader = PdfReader(file)
+            text = ""
+            for page in pdf_reader.pages:
+                text += page.extract_text() + "\n"
+        return {
+            "extracted_info": f"PDF Document content:\n{text[:500]}..."  # Limit to first 500 characters
+        }
+
+    def _process_text_file(self, txt_path):
+        with open(txt_path, 'r') as file:
+            text = file.read()
+        return {
+            "extracted_info": f"Text File content:\n{text[:500]}..."  # Limit to first 500 characters
         }
 
     def generate_scenario(self, criteria, processed_files):
