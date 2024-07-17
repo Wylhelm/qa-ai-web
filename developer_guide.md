@@ -22,35 +22,42 @@ The Test Scenario Generator is a PyQt5-based desktop application that leverages 
 ### MainWindow (gui.py)
 - Implements the main application window and user interface.
 - Handles user interactions, file uploads, and scenario generation/display.
-- Displays the CGI logo.
+- Displays the CGI logo and prototype logo.
+- Includes buttons for system prompt, scenario prompt, and context window customization.
 
 ### AIProcessor (ai_processor.py)
-- Processes files (images and documents) using various AI techniques.
+- Processes documents (Word, PDF, and text files) using various AI techniques.
 - Generates test scenarios using a local LLM server.
-- Integrates with Azure AI Vision for image analysis.
+- Manages system prompt, scenario prompt, and context window size.
 
 ### Database (database.py)
 - Handles SQLite database operations for storing and retrieving scenarios.
 - Implements methods for saving, retrieving, and clearing scenario history.
 
-
 ### TestScenario (test_scenario.py)
 - Defines the data structure for test scenarios.
 - Implements methods for converting scenarios to/from dictionaries.
 
+### SystemPromptWindow (system_prompt_window.py)
+- Provides a dialog for editing system and scenario prompts.
+
+### ContextWindowWindow (context_window_window.py)
+- Provides a dialog for selecting the context window size.
+
 ## Workflow
 1. User creates a new scenario and enters a name.
-2. Files are uploaded and processed by `AIProcessor` and `ImageProcessor`.
+2. Documents are uploaded and processed by `AIProcessor`.
 3. Extracted information is added to the criteria input.
 4. User can modify the criteria if needed.
-5. `AIProcessor` generates a test scenario based on criteria and processed files using the local LLM server.
-6. Generated scenario is displayed, saved to the database, and can be exported.
+5. User can customize system prompt, scenario prompt, and context window size.
+6. `AIProcessor` generates a test scenario based on criteria and processed files using the local LLM server.
+7. Generated scenario is displayed, saved to the database, and can be exported.
 
 ## Extending the Application
 - To add new file types for processing, extend the `process_file` method in `AIProcessor` and create a corresponding processing method.
 - To modify the UI, update the `init_ui` method in `MainWindow`.
 - To change the database schema, update the `create_table` method in `Database` and adjust related methods.
-- To enhance image processing capabilities, modify the `ImageProcessor` class.
+- To add new customization options, create new dialog windows similar to `SystemPromptWindow` and `ContextWindowWindow`.
 
 ## Best Practices
 - Follow PEP 8 style guidelines for Python code.
@@ -63,6 +70,7 @@ The Test Scenario Generator is a PyQt5-based desktop application that leverages 
 - Ensure the local LLM server is running and accessible at http://localhost:1234.
 - Check the console output for error messages and stack traces.
 - Ensure all required dependencies are installed and up to date.
+- Verify that the context window size is appropriate for the chosen LLM model.
 
 ## Future Improvements
 - Implement user authentication and multi-user support.
@@ -72,5 +80,7 @@ The Test Scenario Generator is a PyQt5-based desktop application that leverages 
 - Add a feature to compare and merge multiple scenarios.
 - Implement automated testing for the GUI components.
 - Improve error handling and user feedback for LLM server connection issues.
+- Add support for different LLM providers and models.
+- Implement a feature to save and load custom prompt templates.
 
 For any questions or contributions, please contact the project maintainers.

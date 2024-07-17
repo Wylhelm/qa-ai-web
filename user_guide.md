@@ -17,11 +17,16 @@ The Test Scenario Generator is an AI-powered desktop application designed to ass
 2. You can modify this information at any time before generating the scenario.
 
 ## Uploading Files
-1. Click the "Upload Files (Images/Documents)" button.
+1. Click the "Upload Documents (Word/PDF/TXT)" button.
 2. Select one or more files (supported formats: DOC, DOCX, PDF, TXT).
 3. The application will analyze the files and extract relevant information.
 4. Extracted information will be automatically added to the criteria text area.
 5. If any errors occur during file analysis, you'll see a warning message with details.
+
+## Customizing Prompts and Context Window
+1. Click the "System" button to edit the system prompt used for scenario generation.
+2. Click the "Scenario" button to edit the scenario prompt template.
+3. Click the "Context Window" button to select the context window size (4096 or 8192 tokens).
 
 ## Generating a Test Scenario
 1. After entering criteria and uploading files, click the "Generate Test Scenario" button.
