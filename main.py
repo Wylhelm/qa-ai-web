@@ -4,10 +4,7 @@ from gui import MainWindow
 from ai_processor import AIProcessor
 from database import Database
 from image_processor import ImageProcessor
-from dotenv import load_dotenv
-
 def main():
-    load_dotenv()  # Load environment variables from .env file
     app = QApplication(sys.argv)
     ai_processor = AIProcessor()
     database = Database()

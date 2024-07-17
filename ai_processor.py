@@ -1,17 +1,12 @@
-from openai import OpenAI
-from transformers import ViTImageProcessor, ViTForImageClassification
 from PIL import Image
-import torch
 import cv2
 import pytesseract
 import numpy as np
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
-from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
 from msrest.authentication import CognitiveServicesCredentials
 from config import AZURE_VISION_ENDPOINT, AZURE_VISION_KEY
 import io
 import docx2txt
-import time
 import requests
 
 class AIProcessor:
@@ -19,7 +14,7 @@ class AIProcessor:
         self.computervision_client = ComputerVisionClient(
             AZURE_VISION_ENDPOINT, CognitiveServicesCredentials(AZURE_VISION_KEY)
         )
-        self.image_model = ViTForImageClassification.from_pretrained("google/vit-base-patch16-224")
+        # Remove the image_model initialization as it's not used
 
     def process_file(self, file_path):
         file_extension = file_path.split('.')[-1].lower()
