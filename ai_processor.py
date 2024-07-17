@@ -4,7 +4,13 @@ from PyPDF2 import PdfReader
 
 class AIProcessor:
     def __init__(self):
-        pass
+        self.system_prompt = """You are an AI assistant specialized in generating test scenarios based on given criteria and extracted information from documents. Your task is to create comprehensive test scenarios that adhere to the IEEE 829 standard."""
+
+    def get_system_prompt(self):
+        return self.system_prompt
+
+    def set_system_prompt(self, new_prompt):
+        self.system_prompt = new_prompt
 
     def process_file(self, file_path):
         file_extension = file_path.split('.')[-1].lower()
@@ -42,7 +48,9 @@ class AIProcessor:
 
     def generate_scenario(self, criteria, processed_files):
         combined_info = "\n".join([file.get('extracted_info', '') for file in processed_files])
-        prompt = f"""Based on the following criteria and extracted information, generate a concise test scenario according to the IEEE 829 standard. Respond in English.
+        prompt = f"""{self.system_prompt}
+
+Based on the following criteria and extracted information, generate a concise test scenario according to the IEEE 829 standard. Respond in English.
 
 Criteria:
 {criteria}

@@ -3,7 +3,7 @@ from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import Qt, QSize
 import os
 from test_scenario import TestScenario
-import os
+from system_prompt_window import SystemPromptWindow
 
 class MainWindow(QMainWindow):
     def __init__(self, ai_processor, database, image_processor):
@@ -93,11 +93,20 @@ class MainWindow(QMainWindow):
         layout.addLayout(history_layout)
         
         # Quit Button
+        # System Prompt Button
+        self.system_prompt_button = QPushButton('System')
+        self.system_prompt_button.clicked.connect(self.open_system_prompt_window)
+        layout.addWidget(self.system_prompt_button)
+
         self.quit_button = QPushButton('Quit')
         self.quit_button.clicked.connect(self.close)
         layout.addWidget(self.quit_button, alignment=Qt.AlignBottom)
 
         self.load_scenario_history()
+
+    def open_system_prompt_window(self):
+        self.system_prompt_window = SystemPromptWindow(self.ai_processor)
+        self.system_prompt_window.show()
 
     def create_new_scenario(self):
         scenario_name, ok = QInputDialog.getText(self, 'New Scenario', 'Enter the scenario name:')
