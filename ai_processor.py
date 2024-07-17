@@ -5,12 +5,34 @@ from PyPDF2 import PdfReader
 class AIProcessor:
     def __init__(self):
         self.system_prompt = """You are an AI assistant specialized in generating test scenarios based on given criteria and extracted information from documents. Your task is to create comprehensive test scenarios that adhere to the IEEE 829 standard."""
+        self.scenario_prompt = """Based on the following criteria and extracted information, generate a concise test scenario according to the IEEE 829 standard. Respond in English.
+
+Criteria:
+{criteria}
+
+Extracted information:
+{combined_info}
+
+Generate a test scenario that:
+1. Focuses on key user interface elements and requirements
+2. Includes essential test steps
+3. Covers main positive and negative test cases
+4. Adheres to the IEEE 829 standard
+5. Considers main interactions between elements
+
+Test scenario:"""
 
     def get_system_prompt(self):
         return self.system_prompt
 
     def set_system_prompt(self, new_prompt):
         self.system_prompt = new_prompt
+
+    def get_scenario_prompt(self):
+        return self.scenario_prompt
+
+    def set_scenario_prompt(self, new_prompt):
+        self.scenario_prompt = new_prompt
 
     def process_file(self, file_path):
         file_extension = file_path.split('.')[-1].lower()
@@ -50,22 +72,7 @@ class AIProcessor:
         combined_info = "\n".join([file.get('extracted_info', '') for file in processed_files])
         prompt = f"""{self.system_prompt}
 
-Based on the following criteria and extracted information, generate a concise test scenario according to the IEEE 829 standard. Respond in English.
-
-Criteria:
-{criteria}
-
-Extracted information:
-{combined_info}
-
-Generate a test scenario that:
-1. Focuses on key user interface elements and requirements
-2. Includes essential test steps
-3. Covers main positive and negative test cases
-4. Adheres to the IEEE 829 standard
-5. Considers main interactions between elements
-
-Test scenario:"""
+{self.scenario_prompt.format(criteria=criteria, combined_info=combined_info)}"""
 
         # Ensure the prompt is not truncated
         max_prompt_length = 4096  # Adjust this value based on your LLM's maximum input length
