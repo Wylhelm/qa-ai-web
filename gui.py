@@ -57,7 +57,7 @@ class MainWindow(QMainWindow):
         self.criteria_input.setMinimumHeight(200)  # Set minimum height to match scenario output
         layout.addWidget(self.criteria_input)
 
-        self.upload_files_button = QPushButton('Upload Files (Images/Documents)')
+        self.upload_files_button = QPushButton('Upload Documents (Word/PDF/TXT)')
         self.upload_files_button.clicked.connect(self.upload_files)
         self.upload_files_button.setEnabled(False)
         layout.addWidget(self.upload_files_button)
