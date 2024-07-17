@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Scenario Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Test Scenario Generator</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Create New Scenario</h2>
+                <form id="scenarioForm">
+                    <div class="form-group">
+                        <label for="scenarioName">Scenario Name</label>
+                        <input type="text" class="form-control" id="scenarioName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="criteria">Criteria</label>
+                        <textarea class="form-control" id="criteria" rows="5" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="fileUpload">Upload Documents</label>
+                        <input type="file" class="form-control-file" id="fileUpload" multiple>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Generate Scenario</button>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <h2>Generated Scenario</h2>
+                <div id="generatedScenario" class="border p-3 mb-3" style="min-height: 200px;"></div>
+                <button id="exportScenario" class="btn btn-secondary" style="display: none;">Export Scenario</button>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <h2>Scenario History</h2>
+                <ul id="scenarioHistory" class="list-group"></ul>
+                <button id="clearHistory" class="btn btn-danger mt-3">Clear History</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            loadScenarioHistory();
+
+            $('#scenarioForm').submit(function(e) {
+                e.preventDefault();
+                generateScenario();
+            });
+
+            $('#clearHistory').click(function() {
+                clearHistory();
+            });
+
+            $('#exportScenario').click(function() {
+                exportScenario();
+            });
+        });
+
+        function generateScenario() {
+            // Implementation for scenario generation
+        }
+
+        function loadScenarioHistory() {
+            // Implementation for loading scenario history
+        }
+
+        function clearHistory() {
+            // Implementation for clearing history
+        }
+
+        function exportScenario() {
+            // Implementation for exporting scenario
+        }
+    </script>
+</body>
+</html>
