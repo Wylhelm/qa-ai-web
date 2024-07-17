@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt, QSize
 import os
 from test_scenario import TestScenario
 from system_prompt_window import SystemPromptWindow
+from context_window_window import ContextWindowWindow
 
 class MainWindow(QMainWindow):
     def __init__(self, ai_processor, database, image_processor):
@@ -43,6 +44,11 @@ class MainWindow(QMainWindow):
         self.scenario_prompt_button = QPushButton('Scenario')
         self.scenario_prompt_button.clicked.connect(self.open_scenario_prompt_window)
         logo_layout.addWidget(self.scenario_prompt_button, alignment=Qt.AlignCenter)
+
+        # Context Window Button
+        self.context_window_button = QPushButton('Context Window')
+        self.context_window_button.clicked.connect(self.open_context_window_window)
+        logo_layout.addWidget(self.context_window_button, alignment=Qt.AlignCenter)
 
         # Prototype Logo
         self.prototype_logo_label = QLabel()
@@ -116,6 +122,10 @@ class MainWindow(QMainWindow):
     def open_scenario_prompt_window(self):
         self.scenario_prompt_window = SystemPromptWindow(self.ai_processor, 'scenario')
         self.scenario_prompt_window.show()
+
+    def open_context_window_window(self):
+        self.context_window_window = ContextWindowWindow(self.ai_processor)
+        self.context_window_window.show()
 
     def create_new_scenario(self):
         scenario_name, ok = QInputDialog.getText(self, 'New Scenario', 'Enter the scenario name:')

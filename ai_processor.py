@@ -21,6 +21,7 @@ Generate a test scenario that:
 5. Considers main interactions between elements
 
 Test scenario:"""
+        self.context_window_size = 4096  # Default value
 
     def get_system_prompt(self):
         return self.system_prompt
@@ -33,6 +34,12 @@ Test scenario:"""
 
     def set_scenario_prompt(self, new_prompt):
         self.scenario_prompt = new_prompt
+
+    def get_context_window_size(self):
+        return self.context_window_size
+
+    def set_context_window_size(self, new_size):
+        self.context_window_size = new_size
 
     def process_file(self, file_path):
         file_extension = file_path.split('.')[-1].lower()
@@ -75,7 +82,7 @@ Test scenario:"""
 {self.scenario_prompt.format(criteria=criteria, combined_info=combined_info)}"""
 
         # Ensure the prompt is not truncated
-        max_prompt_length = 8192  # Adjust this value based on your LLM's maximum input length
+        max_prompt_length = self.context_window_size
         if len(prompt) > max_prompt_length:
             print(f"Warning: Prompt exceeds maximum length. Truncating to {max_prompt_length} characters.")
             prompt = prompt[:max_prompt_length]
