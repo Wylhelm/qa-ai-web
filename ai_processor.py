@@ -40,6 +40,7 @@ Test scenario:"""
 
     def set_context_window_size(self, new_size):
         self.context_window_size = new_size
+        print(f"Context window size set to: {new_size}")  # Debug print
 
     def process_file(self, file_path):
         file_extension = file_path.split('.')[-1].lower()

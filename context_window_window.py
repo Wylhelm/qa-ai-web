@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QComboBox, QPushButton, QLabel
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QComboBox, QPushButton, QLabel, QMessageBox
 
 class ContextWindowWindow(QDialog):
     def __init__(self, ai_processor):
@@ -20,6 +20,12 @@ class ContextWindowWindow(QDialog):
         self.combo_box.addItem('8192')
         layout.addWidget(self.combo_box)
 
+        # Set the current index based on the saved value
+        current_size = self.ai_processor.get_context_window_size()
+        index = self.combo_box.findText(str(current_size))
+        if index >= 0:
+            self.combo_box.setCurrentIndex(index)
+
         save_button = QPushButton('Save')
         save_button.clicked.connect(self.save_context_window)
         layout.addWidget(save_button)
@@ -29,4 +35,5 @@ class ContextWindowWindow(QDialog):
     def save_context_window(self):
         selected_size = int(self.combo_box.currentText())
         self.ai_processor.set_context_window_size(selected_size)
+        QMessageBox.information(self, 'Success', f'Context window size set to {selected_size}')
         self.close()
