@@ -34,6 +34,11 @@ class MainWindow(QMainWindow):
         # Spacer
         logo_layout.addStretch()
         
+        # System Prompt Button
+        self.system_prompt_button = QPushButton('System')
+        self.system_prompt_button.clicked.connect(self.open_system_prompt_window)
+        logo_layout.addWidget(self.system_prompt_button, alignment=Qt.AlignCenter)
+
         # Prototype Logo
         self.prototype_logo_label = QLabel()
         prototype_logo_path = os.path.join(os.path.dirname(__file__), "prototype.png")
@@ -93,11 +98,6 @@ class MainWindow(QMainWindow):
         layout.addLayout(history_layout)
         
         # Quit Button
-        # System Prompt Button
-        self.system_prompt_button = QPushButton('System')
-        self.system_prompt_button.clicked.connect(self.open_system_prompt_window)
-        layout.addWidget(self.system_prompt_button)
-
         self.quit_button = QPushButton('Quit')
         self.quit_button.clicked.connect(self.close)
         layout.addWidget(self.quit_button, alignment=Qt.AlignBottom)
