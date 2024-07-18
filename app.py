@@ -90,19 +90,51 @@ def upload_file():
         content = process_file(file)
         return jsonify({'content': content})
 
+from flask import Response, stream_with_context
+
 @app.route('/generate', methods=['POST'])
 def generate():
     data = request.json
     name = data.get('name')
     criteria = data.get('criteria')
+
+    def generate_stream():
+        scenario = ""
+        for chunk in generate_scenario_stream(criteria):
+            scenario += chunk
+            yield chunk
+
+        new_scenario = TestScenario(name=name, criteria=criteria, scenario=scenario)
+        db.session.add(new_scenario)
+        db.session.commit()
+
+    return Response(stream_with_context(generate_stream()), content_type='text/plain')
+
+def generate_scenario_stream(criteria):
+    global SYSTEM_PROMPT, CONTEXT_WINDOW_SIZE
+    url = "http://localhost:1234/v1/chat/completions"
+    headers = {"Content-Type": "application/json"}
+    data = {
+        "model": "local-model",
+        "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": f"Generate a test scenario based on the following criteria:\n\n{criteria}"}
+        ],
+        "max_tokens": CONTEXT_WINDOW_SIZE,
+        "stream": True
+    }
     
-    scenario = generate_scenario(criteria)
-    
-    new_scenario = TestScenario(name=name, criteria=criteria, scenario=scenario)
-    db.session.add(new_scenario)
-    db.session.commit()
-    
-    return jsonify({'scenario': scenario})
+    response = requests.post(url, headers=headers, json=data, stream=True)
+    if response.status_code == 200:
+        for line in response.iter_lines():
+            if line:
+                json_object = json.loads(line.decode('utf-8').split('data: ')[1])
+                if 'choices' in json_object and len(json_object['choices']) > 0:
+                    delta = json_object['choices'][0]['delta']
+                    if 'content' in delta:
+                        yield delta['content']
+    else:
+        yield "Error generating scenario"
 
 @app.route('/scenarios', methods=['GET'])
 def get_scenarios():

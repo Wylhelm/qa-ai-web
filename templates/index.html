@@ -39,7 +39,7 @@
             </div>
             <div class="col-md-6">
                 <h2>Generated Scenario</h2>
-                <div id="generatedScenario" class="border p-3 mb-3" style="min-height: 200px;"></div>
+                <div id="generatedScenario" class="border p-3 mb-3" style="height: 400px; overflow-y: auto; white-space: pre-wrap; font-family: monospace;"></div>
                 <button id="exportScenario" class="btn btn-secondary" disabled>Export Scenario</button>
             </div>
         </div>
@@ -75,13 +75,27 @@
             e.preventDefault();
             const name = document.getElementById('scenarioName').value;
             const criteria = document.getElementById('criteria').value;
+            const generatedScenarioDiv = document.getElementById('generatedScenario');
+            generatedScenarioDiv.textContent = '';
+            document.getElementById('exportScenario').disabled = true;
+
             const response = await fetch('/generate', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({name, criteria})
             });
-            const data = await response.json();
-            document.getElementById('generatedScenario').textContent = data.scenario;
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                const chunk = decoder.decode(value, { stream: true });
+                generatedScenarioDiv.textContent += chunk;
+                generatedScenarioDiv.scrollTop = generatedScenarioDiv.scrollHeight;
+            }
+
             document.getElementById('exportScenario').disabled = false;
             loadScenarios();
         });
