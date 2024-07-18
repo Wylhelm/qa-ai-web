@@ -155,14 +155,66 @@
         document.getElementById('editSystemPromptBtn').addEventListener('click', async () => {
             const response = await fetch('/get_system_prompt');
             const data = await response.json();
-            const newPrompt = prompt('Edit System Prompt:', data.prompt);
-            if (newPrompt !== null) {
+            
+            // Create a modal dialog
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.left = '0';
+            modal.style.top = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+            modal.style.display = 'flex';
+            modal.style.justifyContent = 'center';
+            modal.style.alignItems = 'center';
+
+            // Create the modal content
+            const modalContent = document.createElement('div');
+            modalContent.style.backgroundColor = 'white';
+            modalContent.style.padding = '20px';
+            modalContent.style.borderRadius = '5px';
+            modalContent.style.width = '80%';
+            modalContent.style.maxWidth = '600px';
+
+            // Create a textarea for editing the prompt
+            const textarea = document.createElement('textarea');
+            textarea.value = data.prompt;
+            textarea.style.width = '100%';
+            textarea.style.height = '200px';
+            textarea.style.marginBottom = '10px';
+
+            // Create save and cancel buttons
+            const saveBtn = document.createElement('button');
+            saveBtn.textContent = 'Save';
+            saveBtn.className = 'btn btn-primary me-2';
+            const cancelBtn = document.createElement('button');
+            cancelBtn.textContent = 'Cancel';
+            cancelBtn.className = 'btn btn-secondary';
+
+            // Add elements to the modal
+            modalContent.appendChild(textarea);
+            modalContent.appendChild(saveBtn);
+            modalContent.appendChild(cancelBtn);
+            modal.appendChild(modalContent);
+
+            // Add the modal to the body
+            document.body.appendChild(modal);
+
+            // Handle save button click
+            saveBtn.addEventListener('click', async () => {
+                const newPrompt = textarea.value;
                 await fetch('/set_system_prompt', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({prompt: newPrompt})
                 });
-            }
+                document.body.removeChild(modal);
+            });
+
+            // Handle cancel button click
+            cancelBtn.addEventListener('click', () => {
+                document.body.removeChild(modal);
+            });
         });
 
         document.getElementById('editContextWindowBtn').addEventListener('click', async () => {
