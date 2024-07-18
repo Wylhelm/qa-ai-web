@@ -9,7 +9,10 @@ The Test Scenario Generator is an AI-powered web application designed to assist 
 - Web-based user interface for easy access
 - Scenario history management and storage
 - File upload and processing
-- Sorting and filtering of shared test scenarios
+- Customizable system prompt and scenario prompt
+- Adjustable context window size
+- Real-time scenario generation with stop functionality
+- Clear scenario history option
 
 ## Installation
 1. Ensure Python 3.7+ is installed on your system.
@@ -54,4 +57,4 @@ This project is licensed under the MIT License.
 - CGI for project support
 - OpenAI for AI technologies
 
-For more information, please contact the project maintainers.
+For more information, please contact the project maintainers or refer to the user guide and developer guide.

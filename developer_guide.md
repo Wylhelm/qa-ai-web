@@ -18,7 +18,8 @@ The Test Scenario Generator is a Flask-based web application that leverages AI t
 ### Flask Application (app.py)
 - Implements the main application logic and API endpoints.
 - Handles file uploads, scenario generation, and database operations.
-- Manages system prompt and context window size.
+- Manages system prompt, scenario prompt, and context window size.
+- Implements streaming scenario generation with abort functionality.
 
 ### Database Model (app.py)
 - Uses SQLAlchemy to define the TestScenario model.
@@ -29,20 +30,24 @@ The Test Scenario Generator is a Flask-based web application that leverages AI t
 
 ### AI Integration (app.py)
 - Communicates with a local LLM server to generate test scenarios.
-- Manages system prompt and context window size for scenario generation.
+- Manages system prompt, scenario prompt, and context window size for scenario generation.
+- Implements streaming response handling for real-time scenario generation.
 
 ### User Interface (templates/index.html)
 - Provides a responsive web interface for user interactions.
 - Implements client-side functionality using JavaScript.
+- Handles real-time scenario generation display and abort functionality.
+- Manages customization of system prompt, scenario prompt, and context window size.
 
 ## Workflow
-1. User creates a new scenario and enters a name.
+1. User creates a new scenario with an automatically assigned name.
 2. Documents are uploaded and processed by the server.
 3. Extracted information is added to the criteria input.
 4. User can modify the criteria if needed.
-5. User can customize system prompt and context window size.
+5. User can customize system prompt, scenario prompt, and context window size.
 6. Server generates a test scenario based on criteria and processed files using the local LLM server.
-7. Generated scenario is displayed, saved to the database, and can be exported.
+7. Generated scenario is displayed in real-time, with the option to stop generation.
+8. Completed scenario is saved to the database and can be exported.
 
 ## Extending the Application
 - To add new file types for processing, extend the `process_file` function in `app.py`.
@@ -56,12 +61,20 @@ The Test Scenario Generator is a Flask-based web application that leverages AI t
 - Document new methods and functions using docstrings.
 - Handle exceptions appropriately and provide user-friendly error messages.
 - Use environment variables or a secure method to store sensitive information (e.g., API keys).
+- Implement proper error handling for asynchronous operations in the frontend.
 
 ## Troubleshooting
 - Ensure the local LLM server is running and accessible at http://localhost:1234.
 - Check the server logs for error messages and stack traces.
 - Ensure all required dependencies are installed and up to date.
 - Verify that the context window size is appropriate for the chosen LLM model.
+- Debug frontend issues using browser developer tools and console logs.
+
+## Recent Improvements
+- Added real-time scenario generation with stop functionality.
+- Implemented customizable scenario prompt.
+- Added clear history functionality.
+- Improved UI responsiveness and feedback.
 
 ## Future Improvements
 - Implement user authentication and multi-user support.
@@ -75,5 +88,7 @@ The Test Scenario Generator is a Flask-based web application that leverages AI t
 - Implement a feature to save and load custom prompt templates.
 - Add pagination for scenario history to improve performance with large datasets.
 - Enhance the filtering and sorting system for scenarios with more options and better performance.
+- Implement a progress indicator for scenario generation.
+- Add a feature to edit and regenerate parts of a scenario.
 
 For any questions or contributions, please contact the project maintainers.

@@ -10,6 +10,7 @@ The Test Scenario Generator is an AI-powered web application designed to assist 
 ## Creating a New Scenario
 1. Click the "Create New Scenario" button at the top of the page.
 2. The scenario name input, criteria input, and file upload button will become enabled.
+3. A default name (e.g., "Scenario 1") will be automatically assigned. You can change this if desired.
 
 ## Entering Criteria
 1. In the criteria text area, enter the requirements, user stories, or any other relevant information for your test scenario.
@@ -24,55 +25,41 @@ The Test Scenario Generator is an AI-powered web application designed to assist 
 
 ## Customizing Prompts and Context Window
 1. Click the "Edit System Prompt" button to edit the system prompt used for scenario generation.
-2. Click the "Edit Context Window" button to select the context window size (4096 or 8192 tokens).
-3. Click the "Edit User Message" button to customize the user message template for scenario generation.
+2. Click the "Edit Scenario Prompt" button to customize the scenario prompt template for generation.
+3. Click the "Edit Context Window" button to select the context window size (4096 or 8192 tokens).
 
 ## Generating a Test Scenario
 1. After entering criteria and uploading files, click the "Generate Scenario" button.
 2. The application will process your input using a local LLM server and generate a test scenario.
-3. The generated scenario will appear in the large text area on the right side of the page.
-4. The scenario will be automatically saved to the database and appear in the scenario history.
+3. The generated scenario will appear in real-time in the large text area on the right side of the page.
+4. You can stop the generation at any time by clicking the "Stop Generation" button.
+5. The scenario will be automatically saved to the database and appear in the scenario history.
 
 ## Exporting Scenarios
-1. To export a single scenario, click the "Export Scenario" button after generating or selecting a scenario.
-2. To export all scenarios as a CSV file, click the "Export Scenarios as CSV" button.
+1. After a scenario is generated, the "Export Scenario" button will turn green.
+2. Click the "Export Scenario" button to download the generated scenario as a text file.
 
 ## Viewing Scenario History
 1. The bottom of the page displays a list of previously generated scenarios.
 2. Click on any scenario in the list to view its details, including the name, criteria, and generated scenario.
 3. The selected scenario's information will be loaded into the main interface for viewing or further editing.
 
-## Filtering and Sorting Scenarios
-1. Use the "Filter by scenario name" input to search for specific scenarios.
-2. Use the "Sort by" dropdown to sort scenarios by date or name.
-3. Use the "Sort order" dropdown to choose ascending or descending order.
-4. Click the "Sort" button to apply the filtering and sorting options.
-
-## Creating and Sharing Custom Test Data Sets
-1. Click on the "Data Sets" button to access the custom test data sets feature.
-2. To create a new data set:
-   a. Enter a name for your data set.
-   b. Provide a description of the data set.
-   c. Enter the test data in the provided text area.
-   d. Click "Create Data Set" to save it.
-3. To share a data set:
-   a. Locate the data set you want to share in the list.
-   b. Click the "Share" button next to the data set.
-   c. A unique share ID will be generated for the data set.
-4. To use a shared data set:
-   a. Enter the share ID of the data set you want to use.
-   b. Click "Load Shared Data Set" to import it into your workspace.
+## Clearing Scenario History
+1. To clear all scenario history, click the "Clear History" button at the top of the scenario history section.
+2. Confirm the action when prompted. Note that this action cannot be undone.
 
 ## Tips for Best Results
 - Provide clear and specific criteria for more accurate scenario generation.
 - Include relevant documents that describe the functionality you want to test.
 - Review and adjust the automatically extracted information from uploaded files if necessary.
-- Use custom test data sets to standardize and reuse common test data across scenarios.
+- Experiment with different system prompts and scenario prompts to fine-tune the output.
+- Adjust the context window size if you need to generate longer scenarios.
 
 ## Troubleshooting
 - If file analysis fails, ensure the file is not corrupted and is in a supported format.
 - Check the browser console for any error messages or issues.
 - Verify that all required dependencies are properly installed and configured on the server.
 - Ensure that the local LLM server is running and accessible at http://localhost:1234.
+- If scenario generation seems stuck, try stopping and restarting the generation process.
 
 For technical issues or further assistance, please refer to the developer documentation or contact the development team.
