@@ -222,32 +222,68 @@
             const data = await response.json();
             const currentSize = data.size;
             
-            const menu = document.createElement('div');
-            menu.innerHTML = `
-                <select id="contextWindowSize">
-                    <option value="4096" ${currentSize === 4096 ? 'selected' : ''}>4096</option>
-                    <option value="8192" ${currentSize === 8192 ? 'selected' : ''}>8192</option>
-                </select>
-                <button id="saveContextWindow">Save</button>
+            // Create a modal dialog
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.left = '0';
+            modal.style.top = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+            modal.style.display = 'flex';
+            modal.style.justifyContent = 'center';
+            modal.style.alignItems = 'center';
+
+            // Create the modal content
+            const modalContent = document.createElement('div');
+            modalContent.style.backgroundColor = 'white';
+            modalContent.style.padding = '20px';
+            modalContent.style.borderRadius = '5px';
+            modalContent.style.width = '80%';
+            modalContent.style.maxWidth = '600px';
+
+            // Create a select element for choosing the context window size
+            const select = document.createElement('select');
+            select.id = 'contextWindowSize';
+            select.style.width = '100%';
+            select.style.marginBottom = '10px';
+            select.innerHTML = `
+                <option value="4096" ${currentSize === 4096 ? 'selected' : ''}>4096</option>
+                <option value="8192" ${currentSize === 8192 ? 'selected' : ''}>8192</option>
             `;
-            
-            const existingMenu = document.getElementById('contextWindowMenu');
-            if (existingMenu) {
-                existingMenu.remove();
-            }
-            
-            menu.id = 'contextWindowMenu';
-            document.body.appendChild(menu);
-            
-            document.getElementById('saveContextWindow').addEventListener('click', async () => {
-                const newSize = parseInt(document.getElementById('contextWindowSize').value);
+
+            // Create save and cancel buttons
+            const saveBtn = document.createElement('button');
+            saveBtn.textContent = 'Save';
+            saveBtn.className = 'btn btn-primary me-2';
+            const cancelBtn = document.createElement('button');
+            cancelBtn.textContent = 'Cancel';
+            cancelBtn.className = 'btn btn-secondary';
+
+            // Add elements to the modal
+            modalContent.appendChild(select);
+            modalContent.appendChild(saveBtn);
+            modalContent.appendChild(cancelBtn);
+            modal.appendChild(modalContent);
+
+            // Add the modal to the body
+            document.body.appendChild(modal);
+
+            // Handle save button click
+            saveBtn.addEventListener('click', async () => {
+                const newSize = parseInt(select.value);
                 await fetch('/set_context_window', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({size: newSize})
                 });
-                menu.remove();
+                document.body.removeChild(modal);
                 alert(`Context window size set to ${newSize}`);
+            });
+
+            // Handle cancel button click
+            cancelBtn.addEventListener('click', () => {
+                document.body.removeChild(modal);
             });
         });
     </script>
