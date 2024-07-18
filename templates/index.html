@@ -130,7 +130,7 @@
             historyDiv.innerHTML = '';
             scenarios.forEach(s => {
                 const div = document.createElement('div');
-                div.className = 'mb-2';
+                div.className = 'mb-2 p-2 border rounded cursor-pointer';
                 div.innerHTML = `<strong>${s.name}</strong>: ${s.scenario.substring(0, 100)}...`;
                 div.addEventListener('click', () => {
                     document.getElementById('scenarioName').value = s.name;
@@ -142,7 +142,15 @@
             });
         }
 
-        loadScenarios();
+        // Load scenarios when the page loads
+        document.addEventListener('DOMContentLoaded', loadScenarios);
+
+        // Load scenarios after generating a new scenario
+        document.getElementById('scenarioForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            // ... existing code ...
+            await loadScenarios(); // Add this line to reload scenarios after generation
+        });
 
         document.getElementById('editSystemPromptBtn').addEventListener('click', async () => {
             const response = await fetch('/get_system_prompt');
