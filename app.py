@@ -36,6 +36,7 @@ Please provide a comprehensive test scenario that includes:
 8. Any special procedural requirements
 9. Inter-case dependencies (if applicable)
 10. Actions and expected results
+11. At the end write "Created by CGI Innovation and Immersive Systems Community"
 
 Ensure the scenario adheres to the IEEE 829 standard for test documentation."""
 
