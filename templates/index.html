@@ -89,8 +89,8 @@
             document.getElementById('generatedScenario').textContent = '';
             document.getElementById('exportScenario').disabled = true;
 
-            // Show the criteria placeholder
-            toggleCriteriaPlaceholder();
+            // Hide the criteria placeholder
+            document.getElementById('criteriaPlaceholder').style.display = 'none';
 
             // Focus on the scenario name input
             document.getElementById('scenarioName').focus();
@@ -440,7 +440,8 @@
         function toggleCriteriaPlaceholder() {
             const criteria = document.getElementById('criteria');
             const placeholder = document.getElementById('criteriaPlaceholder');
-            placeholder.style.display = criteria.value.trim() === '' ? 'block' : 'none';
+            const isFormActive = !document.getElementById('scenarioName').disabled;
+            placeholder.style.display = (criteria.value.trim() === '' && !isFormActive) ? 'block' : 'none';
         }
 
         document.addEventListener('DOMContentLoaded', () => {
