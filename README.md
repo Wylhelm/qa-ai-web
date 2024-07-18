@@ -51,10 +51,9 @@ The Test Scenario Generator is an AI-powered web application designed to assist 
 Contributions are welcome! Please read the contributing guidelines for details on our code of conduct and the process for submitting pull requests.
 
 ## License
-This project is licensed under the MIT License.
+This project is licensed under GPL-3.0 license.
 
 ## Acknowledgments
-- CGI for project support
-- OpenAI for AI technologies
+- CGI Innovation and Immersive Systems Community.
 
 For more information, please contact the project maintainers or refer to the user guide and developer guide.
