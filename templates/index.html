@@ -112,7 +112,10 @@
                     generatedScenarioDiv.scrollTop = generatedScenarioDiv.scrollHeight;
                 }
 
-                document.getElementById('exportScenario').disabled = false;
+                const exportButton = document.getElementById('exportScenario');
+                exportButton.disabled = false;
+                exportButton.classList.remove('btn-secondary');
+                exportButton.classList.add('btn-success');
                 loadScenarios();
             } catch (error) {
                 if (error.name === 'AbortError') {
