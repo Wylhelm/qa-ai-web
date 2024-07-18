@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
 from ai_processor import AIProcessor
 from image_processor import ImageProcessor
 from database import db
@@ -7,15 +6,6 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scenarios.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db.init_app(app)
-ai_processor = AIProcessor()
-image_processor = ImageProcessor()
 
 def create_app():
     app = Flask(__name__)
@@ -32,6 +22,9 @@ app = create_app()
 
 # Import TestScenario after db is initialized
 from test_scenario import TestScenario
+
+ai_processor = AIProcessor()
+image_processor = ImageProcessor()
 
 @app.route('/')
 def index():
