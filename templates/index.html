@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Scenario Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding-top: 20px; }
+        .scenario-history { max-height: 300px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Test Scenario Generator</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Create New Scenario</h2>
+                <form id="scenarioForm">
+                    <div class="mb-3">
+                        <label for="scenarioName" class="form-label">Scenario Name</label>
+                        <input type="text" class="form-control" id="scenarioName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="criteria" class="form-label">Criteria</label>
+                        <textarea class="form-control" id="criteria" rows="5" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fileUpload" class="form-label">Upload Document</label>
+                        <input type="file" class="form-control" id="fileUpload">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Generate Scenario</button>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <h2>Generated Scenario</h2>
+                <div id="generatedScenario" class="border p-3 mb-3" style="min-height: 200px;"></div>
+                <button id="exportScenario" class="btn btn-secondary" disabled>Export Scenario</button>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12">
+                <h2>Scenario History</h2>
+                <div id="scenarioHistory" class="scenario-history"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('scenarioForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('scenarioName').value;
+            const criteria = document.getElementById('criteria').value;
+            const response = await fetch('/generate', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({name, criteria})
+            });
+            const data = await response.json();
+            document.getElementById('generatedScenario').textContent = data.scenario;
+            document.getElementById('exportScenario').disabled = false;
+            loadScenarios();
+        });
+
+        document.getElementById('fileUpload').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            document.getElementById('criteria').value += '\n' + data.content;
+        });
+
+        document.getElementById('exportScenario').addEventListener('click', () => {
+            const scenario = document.getElementById('generatedScenario').textContent;
+            const blob = new Blob([scenario], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'scenario.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        async function loadScenarios() {
+            const response = await fetch('/scenarios');
+            const scenarios = await response.json();
+            const historyDiv = document.getElementById('scenarioHistory');
+            historyDiv.innerHTML = '';
+            scenarios.forEach(s => {
+                const div = document.createElement('div');
+                div.className = 'mb-2';
+                div.innerHTML = `<strong>${s.name}</strong>: ${s.scenario.substring(0, 100)}...`;
+                div.addEventListener('click', () => {
+                    document.getElementById('scenarioName').value = s.name;
+                    document.getElementById('criteria').value = s.criteria;
+                    document.getElementById('generatedScenario').textContent = s.scenario;
+                    document.getElementById('exportScenario').disabled = false;
+                });
+                historyDiv.appendChild(div);
+            });
+        }
+
+        loadScenarios();
+    </script>
+</body>
+</html>

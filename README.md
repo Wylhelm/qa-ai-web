@@ -1,15 +1,14 @@
 # Test Scenario Generator
 
 ## Overview
-The Test Scenario Generator is an AI-powered desktop application designed to assist testers and QA professionals in creating comprehensive test scenarios. It analyzes documents (Word, PDF, and text files) to generate scenarios that adhere to the IEEE 829 standard.
+The Test Scenario Generator is an AI-powered web application designed to assist testers and QA professionals in creating comprehensive test scenarios. It analyzes documents (Word, PDF, text files, and images) to generate scenarios that adhere to the IEEE 829 standard.
 
 ## Key Features
-- Document analysis (Word, PDF, and text files)
+- Document analysis (Word, PDF, text files, and images)
 - AI-powered test scenario generation
-- GUI interface for user interaction
+- Web-based user interface for easy access
 - Scenario history management and storage
-- Customizable system and scenario prompts
-- Adjustable context window size for AI processing
+- File upload and processing
 
 ## Installation
 1. Ensure Python 3.7+ is installed on your system.
@@ -29,17 +28,15 @@ The Test Scenario Generator is an AI-powered desktop application designed to ass
 ## Usage
 1. Run the application:
    ```
-   python main.py
+   python app.py
    ```
-2. Follow the on-screen instructions to create and generate test scenarios.
-
-## Documentation
-- For detailed usage instructions, refer to the [User Guide](user_guide.md).
-- For development and contribution guidelines, see the [Developer Guide](developer_guide.md).
+2. Open a web browser and navigate to `http://localhost:5000`
+3. Follow the on-screen instructions to create and generate test scenarios.
 
 ## Requirements
 - Python 3.7+
-- PyQt5
+- Flask
+- Flask-SQLAlchemy
 - docx2txt
 - PyPDF2
 - Pillow
@@ -47,10 +44,10 @@ The Test Scenario Generator is an AI-powered desktop application designed to ass
 - Local LLM server (e.g., using LM Studio) accessible at http://localhost:1234
 
 ## Contributing
-Contributions are welcome! Please read the [Developer Guide](developer_guide.md) for details on our code of conduct and the process for submitting pull requests.
+Contributions are welcome! Please read the contributing guidelines for details on our code of conduct and the process for submitting pull requests.
 
 ## License
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the MIT License.
 
 ## Acknowledgments
 - CGI for project support
