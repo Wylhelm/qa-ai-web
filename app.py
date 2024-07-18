@@ -35,6 +35,7 @@ Please provide a comprehensive test scenario that includes:
 7. Environmental Needs
 8. Any special procedural requirements
 9. Inter-case dependencies (if applicable)
+10. Actions and expected results
 
 Ensure the scenario adheres to the IEEE 829 standard for test documentation."""
 
