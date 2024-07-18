@@ -1,3 +1,5 @@
+![Test Scenario Generator](static/images/appbanner.png)
+
 # Test Scenario Generator
 
 ## Overview
