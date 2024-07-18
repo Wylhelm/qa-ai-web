@@ -21,7 +21,7 @@
                 <div class="d-flex flex-wrap">
                     <button id="createScenarioBtn" class="btn btn-primary btn-sm me-2">Create New Scenario</button>
                     <button id="editSystemPromptBtn" class="btn btn-secondary btn-sm me-2">Edit System Prompt</button>
-                    <button id="editUserMessageBtn" class="btn btn-secondary btn-sm me-2">Edit User Message</button>
+                    <button id="editScenarioPromptBtn" class="btn btn-secondary btn-sm me-2">Edit Scenario Prompt</button>
                     <button id="editContextWindowBtn" class="btn btn-secondary btn-sm">Edit Context Window</button>
                 </div>
             </div>
@@ -294,8 +294,8 @@
             });
         });
 
-        document.getElementById('editUserMessageBtn').addEventListener('click', async () => {
-            const response = await fetch('/get_user_message');
+        document.getElementById('editScenarioPromptBtn').addEventListener('click', async () => {
+            const response = await fetch('/get_scenario_prompt');
             const data = await response.json();
             
             // Create a modal dialog
@@ -318,9 +318,9 @@
             modalContent.style.width = '80%';
             modalContent.style.maxWidth = '600px';
 
-            // Create a textarea for editing the user message
+            // Create a textarea for editing the scenario prompt
             const textarea = document.createElement('textarea');
-            textarea.value = data.message;
+            textarea.value = data.prompt;
             textarea.style.width = '100%';
             textarea.style.height = '200px';
             textarea.style.marginBottom = '10px';
@@ -344,13 +344,14 @@
 
             // Handle save button click
             saveBtn.addEventListener('click', async () => {
-                const newMessage = textarea.value;
-                await fetch('/set_user_message', {
+                const newPrompt = textarea.value;
+                await fetch('/set_scenario_prompt', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({message: newMessage})
+                    body: JSON.stringify({prompt: newPrompt})
                 });
                 document.body.removeChild(modal);
+                showSaveAlert('Scenario prompt updated successfully');
             });
 
             // Handle cancel button click
