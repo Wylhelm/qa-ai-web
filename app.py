@@ -207,5 +207,15 @@ def set_scenario_prompt():
     SCENARIO_PROMPT = data.get('prompt')
     return jsonify({'success': True})
 
+@app.route('/clear_history', methods=['POST'])
+def clear_history():
+    try:
+        TestScenario.query.delete()
+        db.session.commit()
+        return jsonify({'success': True}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug=True)

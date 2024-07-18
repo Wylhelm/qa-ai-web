@@ -53,7 +53,10 @@
         </div>
         <div class="row mt-4">
             <div class="col-12">
-                <h2>Scenario History</h2>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h2>Scenario History</h2>
+                    <button id="clearHistoryBtn" class="btn btn-danger btn-sm">Clear History</button>
+                </div>
                 <div id="scenarioHistory" class="scenario-history"></div>
             </div>
         </div>
@@ -393,6 +396,23 @@
         function showSaveAlert(message) {
             alert(message || 'Changes saved successfully.');
         }
+
+        document.getElementById('clearHistoryBtn').addEventListener('click', async () => {
+            if (confirm('Are you sure you want to clear all scenario history? This action cannot be undone.')) {
+                try {
+                    const response = await fetch('/clear_history', { method: 'POST' });
+                    if (response.ok) {
+                        document.getElementById('scenarioHistory').innerHTML = '';
+                        alert('Scenario history has been cleared.');
+                    } else {
+                        alert('Failed to clear scenario history. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Error clearing history:', error);
+                    alert('An error occurred while clearing the history. Please try again.');
+                }
+            }
+        });
     </script>
 </body>
 </html>
