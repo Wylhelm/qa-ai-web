@@ -17,11 +17,15 @@
             <h1 class="mb-0">Test Scenario Generator</h1>
         </div>
         <div class="row">
+            <div class="col-md-12 mb-3">
+                <div class="d-flex flex-wrap">
+                    <button id="createScenarioBtn" class="btn btn-primary btn-sm me-2">Create New Scenario</button>
+                    <button id="editSystemPromptBtn" class="btn btn-secondary btn-sm me-2">Edit System Prompt</button>
+                    <button id="editContextWindowBtn" class="btn btn-secondary btn-sm me-2">Edit Context Window</button>
+                    <button id="editUserMessageBtn" class="btn btn-secondary btn-sm me-2">Edit User Message</button>
+                </div>
+            </div>
             <div class="col-md-6">
-                <button id="createScenarioBtn" class="btn btn-primary mb-3">Create New Scenario</button>
-                <button id="editSystemPromptBtn" class="btn btn-secondary mb-3 ms-2">Edit System Prompt</button>
-                <button id="editContextWindowBtn" class="btn btn-secondary mb-3 ms-2">Edit Context Window</button>
-                <button id="editUserMessageBtn" class="btn btn-secondary mb-3 ms-2">Edit User Message</button>
                 <form id="scenarioForm" style="display: none;">
                     <div class="mb-3">
                         <label for="scenarioName" class="form-label">Scenario Name</label>
