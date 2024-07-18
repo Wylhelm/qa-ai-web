@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from ai_processor import AIProcessor
 from image_processor import ImageProcessor
-from test_scenario import TestScenario
 from dotenv import load_dotenv
 import os
 
@@ -13,12 +12,20 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scenarios.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 ai_processor = AIProcessor()
 image_processor = ImageProcessor()
 
-with app.app_context():
-    db.create_all()
+def create_app():
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
+    return app
+
+app = create_app()
+
+# Import TestScenario after db is initialized
+from test_scenario import TestScenario
 
 @app.route('/')
 def index():
@@ -51,7 +58,6 @@ def generate_scenario():
 
 @app.route('/history')
 def get_history():
-    from test_scenario import TestScenario  # Import here to avoid circular imports
     scenarios = TestScenario.query.order_by(TestScenario.timestamp.desc()).all()
     return jsonify({
         'title': 'Scenario History',
