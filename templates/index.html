@@ -12,7 +12,10 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="mb-4">Test Scenario Generator</h1>
+        <div class="d-flex align-items-center mb-4">
+            <img src="{{ url_for('static', filename='images/cgi.jpeg') }}" alt="CGI Logo" class="me-3" style="height: 50px;">
+            <h1 class="mb-0">Test Scenario Generator</h1>
+        </div>
         <div class="row">
             <div class="col-md-6">
                 <button id="createScenarioBtn" class="btn btn-primary mb-3">Create New Scenario</button>
