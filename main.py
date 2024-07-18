@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from ai_processor import AIProcessor
 from image_processor import ImageProcessor
+from database import db
 from dotenv import load_dotenv
 import os
 
