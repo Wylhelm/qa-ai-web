@@ -37,7 +37,7 @@
                     <div class="mb-3 position-relative">
                         <label for="criteria" class="form-label">Criteria</label>
                         <textarea class="form-control" id="criteria" rows="10" required disabled></textarea>
-                        <div id="criteriaPlaceholder" class="position-absolute top-50 start-50 translate-middle text-muted">Click on Create New Scenario to begin</div>
+                        <div id="criteriaPlaceholder" class="position-absolute top-50 start-50 translate-middle text-muted">To begin, click on Create New Scenario</div>
                     </div>
                     <div class="mb-3">
                         <label for="fileUpload" class="form-label">Upload Document</label>
@@ -71,6 +71,17 @@
     <script>
         let scenarioCounter = 1;
 
+        // Function to toggle the visibility of the criteria placeholder
+        function toggleCriteriaPlaceholder() {
+            const criteria = document.getElementById('criteria');
+            const placeholder = document.getElementById('criteriaPlaceholder');
+            const isFormActive = !document.getElementById('scenarioName').disabled;
+            placeholder.style.display = (criteria.value.trim() === '' && !isFormActive) ? 'block' : 'none';
+        }
+
+        // Show placeholder by default
+        document.addEventListener('DOMContentLoaded', toggleCriteriaPlaceholder);
+
         document.getElementById('createScenarioBtn').addEventListener('click', () => {
             // Enable form elements
             document.getElementById('scenarioName').disabled = false;
@@ -90,11 +101,14 @@
             document.getElementById('exportScenario').disabled = true;
 
             // Hide the criteria placeholder
-            document.getElementById('criteriaPlaceholder').style.display = 'none';
+            toggleCriteriaPlaceholder();
 
             // Focus on the scenario name input
             document.getElementById('scenarioName').focus();
         });
+
+        // Add event listener to criteria textarea
+        document.getElementById('criteria').addEventListener('input', toggleCriteriaPlaceholder);
 
         let abortController;
 
