@@ -1,17 +1,31 @@
 from flask import Flask, render_template, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
 from ai_processor import AIProcessor
-from database import Database
 from image_processor import ImageProcessor
 from test_scenario import TestScenario
+from dotenv import load_dotenv
 import os
 
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scenarios.db'
+load_dotenv()
 
+db = SQLAlchemy()
 ai_processor = AIProcessor()
-database = Database(app)
 image_processor = ImageProcessor()
+
+def create_app():
+    app = Flask(__name__)
+    app.config['UPLOAD_FOLDER'] = 'uploads'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scenarios.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    db.init_app(app)
+
+    with app.app_context():
+        db.create_all()
+
+    return app
+
+app = create_app()
 
 @app.route('/')
 def index():
@@ -38,17 +52,19 @@ def generate_scenario():
     processed_files = data['processed_files']
     scenario = ai_processor.generate_scenario(criteria, processed_files)
     test_scenario = TestScenario(scenario_name, criteria, scenario, processed_files)
-    database.save_scenario(test_scenario)
+    db.session.add(test_scenario)
+    db.session.commit()
     return jsonify({'scenario': scenario})
 
 @app.route('/history')
 def get_history():
-    scenarios = database.get_scenarios()
+    scenarios = TestScenario.query.order_by(TestScenario.timestamp.desc()).all()
     return jsonify([scenario.to_dict() for scenario in scenarios])
 
 @app.route('/clear_history', methods=['POST'])
 def clear_history():
-    database.clear_history()
+    TestScenario.query.delete()
+    db.session.commit()
     return jsonify({'message': 'History cleared'})
 
 @app.route('/update_prompt', methods=['POST'])
