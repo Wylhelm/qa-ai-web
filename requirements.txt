@@ -5,3 +5,5 @@ PyPDF2==3.0.1
 Pillow==10.0.0
 pytesseract==0.3.10
 Flask-SQLAlchemy==3.0.5
+PyQt5==5.15.9
+python-dotenv==1.0.0
