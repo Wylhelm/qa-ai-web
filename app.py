@@ -17,6 +17,10 @@ db = SQLAlchemy(app)
 # Ensure the upload folder exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
+# Global variables for system prompt and context window size
+SYSTEM_PROMPT = "You are a test scenario generator that creates comprehensive test scenarios based on given criteria."
+CONTEXT_WINDOW_SIZE = 4096
+
 class TestScenario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -53,15 +57,16 @@ def process_file(file):
             os.remove(filepath)
 
 def generate_scenario(criteria):
+    global SYSTEM_PROMPT, CONTEXT_WINDOW_SIZE
     url = "http://localhost:1234/v1/chat/completions"
     headers = {"Content-Type": "application/json"}
     data = {
         "model": "local-model",
         "messages": [
-            {"role": "system", "content": "You are a test scenario generator that creates comprehensive test scenarios based on given criteria."},
+            {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": f"Generate a test scenario based on the following criteria:\n\n{criteria}"}
         ],
-        "max_tokens": 500
+        "max_tokens": CONTEXT_WINDOW_SIZE
     }
     
     response = requests.post(url, headers=headers, data=json.dumps(data))
@@ -103,6 +108,34 @@ def generate():
 def get_scenarios():
     scenarios = TestScenario.query.all()
     return jsonify([{'id': s.id, 'name': s.name, 'criteria': s.criteria, 'scenario': s.scenario} for s in scenarios])
+
+@app.route('/get_system_prompt', methods=['GET'])
+def get_system_prompt():
+    global SYSTEM_PROMPT
+    return jsonify({'prompt': SYSTEM_PROMPT})
+
+@app.route('/set_system_prompt', methods=['POST'])
+def set_system_prompt():
+    global SYSTEM_PROMPT
+    data = request.json
+    SYSTEM_PROMPT = data.get('prompt')
+    return jsonify({'success': True})
+
+@app.route('/get_context_window', methods=['GET'])
+def get_context_window():
+    global CONTEXT_WINDOW_SIZE
+    return jsonify({'size': CONTEXT_WINDOW_SIZE})
+
+@app.route('/set_context_window', methods=['POST'])
+def set_context_window():
+    global CONTEXT_WINDOW_SIZE
+    data = request.json
+    size = data.get('size')
+    if size in [4096, 8192]:
+        CONTEXT_WINDOW_SIZE = size
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False, 'error': 'Invalid context window size'})
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -16,6 +16,8 @@
         <div class="row">
             <div class="col-md-6">
                 <button id="createScenarioBtn" class="btn btn-primary mb-3">Create New Scenario</button>
+                <button id="editSystemPromptBtn" class="btn btn-secondary mb-3 ms-2">Edit System Prompt</button>
+                <button id="editContextWindowBtn" class="btn btn-secondary mb-3 ms-2">Edit Context Window</button>
                 <form id="scenarioForm" style="display: none;">
                     <div class="mb-3">
                         <label for="scenarioName" class="form-label">Scenario Name</label>
@@ -124,6 +126,32 @@
         }
 
         loadScenarios();
+
+        document.getElementById('editSystemPromptBtn').addEventListener('click', async () => {
+            const response = await fetch('/get_system_prompt');
+            const data = await response.json();
+            const newPrompt = prompt('Edit System Prompt:', data.prompt);
+            if (newPrompt !== null) {
+                await fetch('/set_system_prompt', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({prompt: newPrompt})
+                });
+            }
+        });
+
+        document.getElementById('editContextWindowBtn').addEventListener('click', async () => {
+            const response = await fetch('/get_context_window');
+            const data = await response.json();
+            const newSize = prompt('Edit Context Window Size (4096 or 8192):', data.size);
+            if (newSize !== null) {
+                await fetch('/set_context_window', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({size: parseInt(newSize)})
+                });
+            }
+        });
     </script>
 </body>
 </html>
