@@ -129,8 +129,10 @@ def generate():
 
     return Response(stream_with_context(generate_stream()), content_type='text/plain')
 
+import time
+
 def generate_scenario_stream(criteria):
-    global SYSTEM_PROMPT, CONTEXT_WINDOW_SIZE, USER_MESSAGE
+    global SYSTEM_PROMPT, CONTEXT_WINDOW_SIZE, SCENARIO_PROMPT
     url = "http://localhost:1234/v1/chat/completions"
     headers = {"Content-Type": "application/json"}
     data = {
@@ -142,6 +144,10 @@ def generate_scenario_stream(criteria):
         "max_tokens": CONTEXT_WINDOW_SIZE,
         "stream": True
     }
+    
+    start_time = time.time()
+    input_tokens = len(SYSTEM_PROMPT.split()) + len(SCENARIO_PROMPT.format(criteria=criteria).split())
+    output_tokens = 0
     
     response = requests.post(url, headers=headers, json=data, stream=True)
     if response.status_code == 200:
@@ -155,11 +161,17 @@ def generate_scenario_stream(criteria):
                         if 'choices' in json_object and len(json_object['choices']) > 0:
                             delta = json_object['choices'][0]['delta']
                             if 'content' in delta:
-                                yield delta['content']
+                                content = delta['content']
+                                output_tokens += len(content.split())
+                                yield content
                 except json.JSONDecodeError:
                     print(f"Failed to parse JSON: {line_text}")
                 except Exception as e:
                     print(f"Error processing line: {str(e)}")
+        
+        end_time = time.time()
+        generation_time = end_time - start_time
+        yield f"\n\nInference Statistics:\nInput Tokens: {input_tokens}\nOutput Tokens: {output_tokens}\nGeneration Time: {generation_time:.2f} seconds"
     else:
         yield f"Error generating scenario: HTTP {response.status_code}"
 
