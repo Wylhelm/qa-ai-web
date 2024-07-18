@@ -14,6 +14,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scenarios.db'
 app.config['UPLOAD_FOLDER'] = 'uploads'
 db = SQLAlchemy(app)
 
+# Ensure the upload folder exists
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
 class TestScenario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -24,23 +27,30 @@ with app.app_context():
     db.create_all()
 
 def process_file(file):
-    filename = secure_filename(file.filename)
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    file.save(filepath)
+    try:
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
 
-    if filename.endswith('.docx'):
-        return docx2txt.process(filepath)
-    elif filename.endswith('.pdf'):
-        with open(filepath, 'rb') as f:
-            reader = PyPDF2.PdfReader(f)
-            return ' '.join([page.extract_text() for page in reader.pages])
-    elif filename.endswith('.txt'):
-        with open(filepath, 'r') as f:
-            return f.read()
-    elif filename.endswith(('.png', '.jpg', '.jpeg')):
-        return pytesseract.image_to_string(Image.open(filepath))
-    else:
+        if filename.endswith('.docx'):
+            return docx2txt.process(filepath)
+        elif filename.endswith('.pdf'):
+            with open(filepath, 'rb') as f:
+                reader = PyPDF2.PdfReader(f)
+                return ' '.join([page.extract_text() for page in reader.pages])
+        elif filename.endswith('.txt'):
+            with open(filepath, 'r') as f:
+                return f.read()
+        elif filename.endswith(('.png', '.jpg', '.jpeg')):
+            return pytesseract.image_to_string(Image.open(filepath))
+        else:
+            return ''
+    except Exception as e:
+        print(f"Error processing file: {str(e)}")
         return ''
+    finally:
+        if os.path.exists(filepath):
+            os.remove(filepath)
 
 def generate_scenario(criteria):
     url = "http://localhost:1234/v1/chat/completions"
