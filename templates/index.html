@@ -12,9 +12,12 @@
 </head>
 <body>
     <div class="container">
-        <div class="d-flex align-items-center mb-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
             <img src="{{ url_for('static', filename='images/cgi.jpeg') }}" alt="CGI Logo" class="me-3" style="height: 50px;">
-            <h1 class="mb-0">Test Scenario Generator</h1>
+            <div class="flex-grow-1 text-center">
+                <img src="{{ url_for('static', filename='images/appbanner.png') }}" alt="Test Scenario Generator" class="img-fluid" style="max-height: 80px;">
+            </div>
+            <div style="width: 50px;"></div> <!-- This empty div balances the layout -->
         </div>
         <div class="row">
             <div class="col-md-12 mb-3">
@@ -33,7 +36,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="criteria" class="form-label">Criteria</label>
-                        <textarea class="form-control" id="criteria" rows="5" required></textarea>
+                        <textarea class="form-control" id="criteria" rows="10" required></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="fileUpload" class="form-label">Upload Document</label>
@@ -44,7 +47,7 @@
             </div>
             <div class="col-md-6">
                 <h2>Generated Scenario</h2>
-                <div id="generatedScenario" class="border p-3 mb-3" style="height: 400px; overflow-y: auto; white-space: pre-wrap; font-family: monospace;"></div>
+                <div id="generatedScenario" class="border p-3 mb-3" style="height: 500px; overflow-y: auto; white-space: pre-wrap; font-family: monospace;"></div>
                 <div id="inferenceStats" class="border p-2 mb-3" style="font-size: 0.9em; display: none;"></div>
                 <div>
                     <button id="exportScenario" class="btn btn-secondary me-2" disabled>Export Scenario</button>
