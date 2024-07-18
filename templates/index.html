@@ -168,14 +168,35 @@
         document.getElementById('editContextWindowBtn').addEventListener('click', async () => {
             const response = await fetch('/get_context_window');
             const data = await response.json();
-            const newSize = prompt('Edit Context Window Size (4096 or 8192):', data.size);
-            if (newSize !== null) {
+            const currentSize = data.size;
+            
+            const menu = document.createElement('div');
+            menu.innerHTML = `
+                <select id="contextWindowSize">
+                    <option value="4096" ${currentSize === 4096 ? 'selected' : ''}>4096</option>
+                    <option value="8192" ${currentSize === 8192 ? 'selected' : ''}>8192</option>
+                </select>
+                <button id="saveContextWindow">Save</button>
+            `;
+            
+            const existingMenu = document.getElementById('contextWindowMenu');
+            if (existingMenu) {
+                existingMenu.remove();
+            }
+            
+            menu.id = 'contextWindowMenu';
+            document.body.appendChild(menu);
+            
+            document.getElementById('saveContextWindow').addEventListener('click', async () => {
+                const newSize = parseInt(document.getElementById('contextWindowSize').value);
                 await fetch('/set_context_window', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({size: parseInt(newSize)})
+                    body: JSON.stringify({size: newSize})
                 });
-            }
+                menu.remove();
+                alert(`Context window size set to ${newSize}`);
+            });
         });
     </script>
 </body>
