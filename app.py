@@ -136,7 +136,7 @@ def generate_scenario_stream(criteria):
         "model": "local-model",
         "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": USER_MESSAGE.format(criteria=criteria)}
+            {"role": "user", "content": SCENARIO_PROMPT.format(criteria=criteria)}
         ],
         "max_tokens": CONTEXT_WINDOW_SIZE,
         "stream": True
