@@ -112,14 +112,14 @@ def generate():
     return Response(stream_with_context(generate_stream()), content_type='text/plain')
 
 def generate_scenario_stream(criteria):
-    global SYSTEM_PROMPT, CONTEXT_WINDOW_SIZE
+    global SYSTEM_PROMPT, CONTEXT_WINDOW_SIZE, USER_MESSAGE
     url = "http://localhost:1234/v1/chat/completions"
     headers = {"Content-Type": "application/json"}
     data = {
         "model": "local-model",
         "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": f"Generate a test scenario based on the following criteria:\n\n{criteria}"}
+            {"role": "user", "content": USER_MESSAGE.format(criteria=criteria)}
         ],
         "max_tokens": CONTEXT_WINDOW_SIZE,
         "stream": True
