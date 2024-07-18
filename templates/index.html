@@ -21,7 +21,10 @@
     <textarea id="scenario-output" rows="10" readonly></textarea>
     <button id="export-btn">Export Scenario</button>
     <button id="clear-history-btn">Clear History</button>
-    <div id="history"></div>
+    <div id="history">
+        <h2 id="history-title"></h2>
+        <ul id="history-list"></ul>
+    </div>
 
     <script>
         $(document).ready(function() {
@@ -78,12 +81,13 @@
             });
 
             function loadHistory() {
-                $.get('/history', function(scenarios) {
-                    let historyHtml = '<h2>Scenario History:</h2>';
-                    scenarios.forEach(function(scenario) {
-                        historyHtml += `<p><strong>${scenario.name}</strong> - ${scenario.criteria.split('\n')[0]}</p>`;
+                $.get('/history', function(data) {
+                    $('#history-title').text(data.title);
+                    let historyList = $('#history-list');
+                    historyList.empty();
+                    data.scenarios.forEach(function(scenario) {
+                        historyList.append(`<li><strong>${scenario.name}</strong> - ${scenario.criteria.split('\n')[0]}</li>`);
                     });
-                    $('#history').html(historyHtml);
                 });
             }
 

@@ -59,7 +59,10 @@ def generate_scenario():
 @app.route('/history')
 def get_history():
     scenarios = TestScenario.query.order_by(TestScenario.timestamp.desc()).all()
-    return jsonify([scenario.to_dict() for scenario in scenarios])
+    return jsonify({
+        'title': 'Scenario History',
+        'scenarios': [scenario.to_dict() for scenario in scenarios]
+    })
 
 @app.route('/clear_history', methods=['POST'])
 def clear_history():
