@@ -17,10 +17,26 @@ db = SQLAlchemy(app)
 # Ensure the upload folder exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-# Global variables for system prompt and context window size
+# Global variables for system prompt, scenario prompt, and context window size
 SYSTEM_PROMPT = "You are a test scenario generator that creates comprehensive test scenarios based on given criteria."
 CONTEXT_WINDOW_SIZE = 4096
-USER_MESSAGE = "Generate a test scenario based on the following criteria:\n\n{criteria}"
+SCENARIO_PROMPT = """Generate a test scenario based on the following criteria:
+
+{criteria}
+
+Please provide a comprehensive test scenario that includes:
+
+1. Test Scenario ID and Name
+2. Test Case Objective
+3. Preconditions
+4. Test Steps (including inputs and expected results)
+5. Post-conditions
+6. Test Data Requirements
+7. Environmental Needs
+8. Any special procedural requirements
+9. Inter-case dependencies (if applicable)
+
+Ensure the scenario adheres to the IEEE 829 standard for test documentation."""
 
 class TestScenario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -65,7 +81,7 @@ def generate_scenario(criteria):
         "model": "local-model",
         "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": USER_MESSAGE.format(criteria=criteria)}
+            {"role": "user", "content": SCENARIO_PROMPT.format(criteria=criteria)}
         ],
         "max_tokens": CONTEXT_WINDOW_SIZE
     }
@@ -178,16 +194,16 @@ def set_context_window():
     else:
         return jsonify({'success': False, 'error': 'Invalid context window size'})
 
-@app.route('/get_user_message', methods=['GET'])
-def get_user_message():
-    global USER_MESSAGE
-    return jsonify({'message': USER_MESSAGE})
+@app.route('/get_scenario_prompt', methods=['GET'])
+def get_scenario_prompt():
+    global SCENARIO_PROMPT
+    return jsonify({'prompt': SCENARIO_PROMPT})
 
-@app.route('/set_user_message', methods=['POST'])
-def set_user_message():
-    global USER_MESSAGE
+@app.route('/set_scenario_prompt', methods=['POST'])
+def set_scenario_prompt():
+    global SCENARIO_PROMPT
     data = request.json
-    USER_MESSAGE = data.get('message')
+    SCENARIO_PROMPT = data.get('prompt')
     return jsonify({'success': True})
 
 if __name__ == '__main__':
