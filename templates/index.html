@@ -29,24 +29,21 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div id="initialPlaceholder" class="text-center p-5 border rounded">
-                    <p class="text-muted">Click on Create New Scenario to begin</p>
-                </div>
-                <form id="scenarioForm" style="display: none;">
+                <form id="scenarioForm">
                     <div class="mb-3">
                         <label for="scenarioName" class="form-label">Scenario Name</label>
-                        <input type="text" class="form-control" id="scenarioName" required>
+                        <input type="text" class="form-control" id="scenarioName" required disabled>
                     </div>
                     <div class="mb-3 position-relative">
                         <label for="criteria" class="form-label">Criteria</label>
-                        <textarea class="form-control" id="criteria" rows="10" required></textarea>
-                        <div id="criteriaPlaceholder" class="position-absolute top-50 start-50 translate-middle text-muted">Click on Generate Scenario to begin</div>
+                        <textarea class="form-control" id="criteria" rows="10" required disabled></textarea>
+                        <div id="criteriaPlaceholder" class="position-absolute top-50 start-50 translate-middle text-muted">Click on Create New Scenario to begin</div>
                     </div>
                     <div class="mb-3">
                         <label for="fileUpload" class="form-label">Upload Document</label>
-                        <input type="file" class="form-control" id="fileUpload">
+                        <input type="file" class="form-control" id="fileUpload" disabled>
                     </div>
-                    <button type="submit" class="btn btn-primary">Generate Scenario</button>
+                    <button type="submit" class="btn btn-primary" disabled>Generate Scenario</button>
                 </form>
             </div>
             <div class="col-md-6">
@@ -75,9 +72,11 @@
         let scenarioCounter = 1;
 
         document.getElementById('createScenarioBtn').addEventListener('click', () => {
-            // Hide initial placeholder and show the form
-            document.getElementById('initialPlaceholder').style.display = 'none';
-            document.getElementById('scenarioForm').style.display = 'block';
+            // Enable form elements
+            document.getElementById('scenarioName').disabled = false;
+            document.getElementById('criteria').disabled = false;
+            document.getElementById('fileUpload').disabled = false;
+            document.getElementById('scenarioForm').querySelector('button[type="submit"]').disabled = false;
 
             // Reset form
             document.getElementById('scenarioForm').reset();
@@ -92,6 +91,9 @@
 
             // Show the criteria placeholder
             toggleCriteriaPlaceholder();
+
+            // Focus on the scenario name input
+            document.getElementById('scenarioName').focus();
         });
 
         let abortController;
