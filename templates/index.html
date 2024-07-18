@@ -74,6 +74,9 @@
             // Clear the generated scenario
             document.getElementById('generatedScenario').textContent = '';
             document.getElementById('exportScenario').disabled = true;
+
+            // Show alert message
+            alert('New scenario created. Please fill in the details.');
         });
 
         document.getElementById('scenarioForm').addEventListener('submit', async (e) => {
@@ -161,6 +164,7 @@
         document.getElementById('editSystemPromptBtn').addEventListener('click', async () => {
             const response = await fetch('/get_system_prompt');
             const data = await response.json();
+            alert('Editing system prompt. Please make your changes in the modal.');
             
             // Create a modal dialog
             const modal = document.createElement('div');
@@ -228,6 +232,7 @@
             const response = await fetch('/get_context_window');
             const data = await response.json();
             const currentSize = data.size;
+            alert('Editing context window size. Please select a new size in the modal.');
             
             // Create a modal dialog
             const modal = document.createElement('div');
@@ -297,6 +302,7 @@
         document.getElementById('editUserMessageBtn').addEventListener('click', async () => {
             const response = await fetch('/get_user_message');
             const data = await response.json();
+            alert('Editing user message template. Please make your changes in the modal.');
             
             // Create a modal dialog
             const modal = document.createElement('div');
