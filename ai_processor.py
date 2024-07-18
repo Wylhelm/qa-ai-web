@@ -77,3 +77,21 @@ Test scenario:"""
             return scenario
         except requests.RequestException as e:
             return f"Error generating the scenario. Please check if the local LLM is accessible. Debug info: {str(e)}"
+
+    def set_system_prompt(self, prompt):
+        self.system_prompt = prompt
+
+    def set_scenario_prompt(self, prompt):
+        self.scenario_prompt = prompt
+
+    def set_context_window_size(self, size):
+        self.context_window_size = size
+
+    def get_system_prompt(self):
+        return self.system_prompt
+
+    def get_scenario_prompt(self):
+        return self.scenario_prompt
+
+    def get_context_window_size(self):
+        return self.context_window_size
