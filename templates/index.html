@@ -119,11 +119,12 @@
 
         document.getElementById('exportScenario').addEventListener('click', () => {
             const scenario = document.getElementById('generatedScenario').textContent;
+            const scenarioName = document.getElementById('scenarioName').value;
             const blob = new Blob([scenario], {type: 'text/plain'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'scenario.txt';
+            a.download = `${scenarioName.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_scenario.txt`;
             a.click();
             URL.revokeObjectURL(url);
         });
