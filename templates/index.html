@@ -48,9 +48,22 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        let scenarioCounter = 1;
+
         document.getElementById('createScenarioBtn').addEventListener('click', () => {
+            // Reset form
+            document.getElementById('scenarioForm').reset();
+            
+            // Set a new default name for the scenario
+            document.getElementById('scenarioName').value = `Scenario ${scenarioCounter}`;
+            scenarioCounter++;
+
+            // Show the form
             document.getElementById('scenarioForm').style.display = 'block';
-            document.getElementById('createScenarioBtn').style.display = 'none';
+            
+            // Clear the generated scenario
+            document.getElementById('generatedScenario').textContent = '';
+            document.getElementById('exportScenario').disabled = true;
         });
 
         document.getElementById('scenarioForm').addEventListener('submit', async (e) => {
@@ -66,11 +79,6 @@
             document.getElementById('generatedScenario').textContent = data.scenario;
             document.getElementById('exportScenario').disabled = false;
             loadScenarios();
-            
-            // Reset form and show create button again
-            document.getElementById('scenarioForm').reset();
-            document.getElementById('scenarioForm').style.display = 'none';
-            document.getElementById('createScenarioBtn').style.display = 'block';
         });
 
         document.getElementById('fileUpload').addEventListener('change', async (e) => {
