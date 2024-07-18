@@ -20,6 +20,7 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # Global variables for system prompt and context window size
 SYSTEM_PROMPT = "You are a test scenario generator that creates comprehensive test scenarios based on given criteria."
 CONTEXT_WINDOW_SIZE = 4096
+USER_MESSAGE = "Generate a test scenario based on the following criteria:\n\n{criteria}"
 
 class TestScenario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -64,7 +65,7 @@ def generate_scenario(criteria):
         "model": "local-model",
         "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": f"Generate a test scenario based on the following criteria:\n\n{criteria}"}
+            {"role": "user", "content": USER_MESSAGE.format(criteria=criteria)}
         ],
         "max_tokens": CONTEXT_WINDOW_SIZE
     }
@@ -176,6 +177,18 @@ def set_context_window():
         return jsonify({'success': True})
     else:
         return jsonify({'success': False, 'error': 'Invalid context window size'})
+
+@app.route('/get_user_message', methods=['GET'])
+def get_user_message():
+    global USER_MESSAGE
+    return jsonify({'message': USER_MESSAGE})
+
+@app.route('/set_user_message', methods=['POST'])
+def set_user_message():
+    global USER_MESSAGE
+    data = request.json
+    USER_MESSAGE = data.get('message')
+    return jsonify({'success': True})
 
 if __name__ == '__main__':
     app.run(debug=True)
