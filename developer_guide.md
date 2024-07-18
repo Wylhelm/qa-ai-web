@@ -1,74 +1,65 @@
 # Test Scenario Generator - Developer Guide
 
 ## Project Overview 
-The Test Scenario Generator is a PyQt5-based desktop application that leverages AI to analyze documents (Word, PDF, and text files) to automatically generate comprehensive test scenarios. It uses natural language processing to create scenarios adhering to the IEEE 829 standard.
+The Test Scenario Generator is a Flask-based web application that leverages AI to analyze documents (Word, PDF, text files, and images) to automatically generate comprehensive test scenarios. It uses natural language processing to create scenarios adhering to the IEEE 829 standard.
 
 ## Project Structure
-- `main.py`: Entry point of the application
-- `gui.py`: Contains the main GUI implementation
-- `ai_processor.py`: Handles AI-related operations and scenario generation
-- `database.py`: Manages SQLite database operations
-- `test_scenario.py`: Defines the TestScenario class
-- `config.py`: Contains configuration settings (e.g., Azure AI Vision credentials)
+- `app.py`: Main application file containing Flask routes and core functionality
+- `templates/index.html`: HTML template for the main user interface
+- `static/`: Directory for static files (CSS, JavaScript, images)
 
 ## Setup and Dependencies
 1. Ensure Python 3.7+ is installed.
 2. Install dependencies: `pip install -r requirements.txt`
-3. Set up Azure AI Vision and update credentials in `config.py`.
-5. Set up a local LLM server (e.g., using LM Studio) accessible at http://localhost:1234.
+3. Set up a local LLM server (e.g., using LM Studio) accessible at http://localhost:1234.
 
 ## Key Components
 
-### MainWindow (gui.py)
-- Implements the main application window and user interface.
-- Handles user interactions, file uploads, and scenario generation/display.
-- Displays the CGI logo and prototype logo.
-- Includes buttons for system prompt, scenario prompt, and context window customization.
+### Flask Application (app.py)
+- Implements the main application logic and API endpoints.
+- Handles file uploads, scenario generation, and database operations.
+- Manages system prompt and context window size.
 
-### AIProcessor (ai_processor.py)
-- Processes documents (Word, PDF, and text files) using various AI techniques.
-- Generates test scenarios using a local LLM server.
-- Manages system prompt, scenario prompt, and context window size.
+### Database Model (app.py)
+- Uses SQLAlchemy to define the TestScenario model.
+- Handles database operations for storing and retrieving scenarios.
 
-### Database (database.py)
-- Handles SQLite database operations for storing and retrieving scenarios.
-- Implements methods for saving, retrieving, and clearing scenario history.
+### File Processing (app.py)
+- Processes various file types (DOCX, PDF, TXT, PNG, JPG, JPEG) using libraries like docx2txt, PyPDF2, and pytesseract.
 
-### TestScenario (test_scenario.py)
-- Defines the data structure for test scenarios.
-- Implements methods for converting scenarios to/from dictionaries.
+### AI Integration (app.py)
+- Communicates with a local LLM server to generate test scenarios.
+- Manages system prompt and context window size for scenario generation.
 
-### SystemPromptWindow (system_prompt_window.py)
-- Provides a dialog for editing system and scenario prompts.
-
-### ContextWindowWindow (context_window_window.py)
-- Provides a dialog for selecting the context window size.
+### User Interface (templates/index.html)
+- Provides a responsive web interface for user interactions.
+- Implements client-side functionality using JavaScript.
 
 ## Workflow
 1. User creates a new scenario and enters a name.
-2. Documents are uploaded and processed by `AIProcessor`.
+2. Documents are uploaded and processed by the server.
 3. Extracted information is added to the criteria input.
 4. User can modify the criteria if needed.
-5. User can customize system prompt, scenario prompt, and context window size.
-6. `AIProcessor` generates a test scenario based on criteria and processed files using the local LLM server.
+5. User can customize system prompt and context window size.
+6. Server generates a test scenario based on criteria and processed files using the local LLM server.
 7. Generated scenario is displayed, saved to the database, and can be exported.
 
 ## Extending the Application
-- To add new file types for processing, extend the `process_file` method in `AIProcessor` and create a corresponding processing method.
-- To modify the UI, update the `init_ui` method in `MainWindow`.
-- To change the database schema, update the `create_table` method in `Database` and adjust related methods.
-- To add new customization options, create new dialog windows similar to `SystemPromptWindow` and `ContextWindowWindow`.
+- To add new file types for processing, extend the `process_file` function in `app.py`.
+- To modify the UI, update the `index.html` template and associated JavaScript.
+- To change the database schema, update the `TestScenario` model in `app.py` and perform necessary migrations.
+- To add new features, create new routes in `app.py` and corresponding UI elements in `index.html`.
 
 ## Best Practices
 - Follow PEP 8 style guidelines for Python code.
 - Write unit tests for new features (use `unittest` or `pytest`).
-- Document new methods and classes using docstrings.
+- Document new methods and functions using docstrings.
 - Handle exceptions appropriately and provide user-friendly error messages.
 - Use environment variables or a secure method to store sensitive information (e.g., API keys).
 
 ## Troubleshooting
 - Ensure the local LLM server is running and accessible at http://localhost:1234.
-- Check the console output for error messages and stack traces.
+- Check the server logs for error messages and stack traces.
 - Ensure all required dependencies are installed and up to date.
 - Verify that the context window size is appropriate for the chosen LLM model.
 
@@ -78,9 +69,11 @@ The Test Scenario Generator is a PyQt5-based desktop application that leverages 
 - Enhance the UI with more interactive features and real-time updates.
 - Implement a plugin system for easy extension of file processing capabilities.
 - Add a feature to compare and merge multiple scenarios.
-- Implement automated testing for the GUI components.
+- Implement automated testing for both backend and frontend components.
 - Improve error handling and user feedback for LLM server connection issues.
 - Add support for different LLM providers and models.
 - Implement a feature to save and load custom prompt templates.
+- Add pagination for scenario history to improve performance with large datasets.
+- Implement a more advanced filtering and sorting system for scenarios.
 
 For any questions or contributions, please contact the project maintainers.
