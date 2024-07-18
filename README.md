@@ -9,6 +9,7 @@ The Test Scenario Generator is an AI-powered web application designed to assist 
 - Web-based user interface for easy access
 - Scenario history management and storage
 - File upload and processing
+- Sorting and filtering of shared test scenarios
 
 ## Installation
 1. Ensure Python 3.7+ is installed on your system.

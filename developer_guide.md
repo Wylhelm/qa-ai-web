@@ -74,6 +74,6 @@ The Test Scenario Generator is a Flask-based web application that leverages AI t
 - Add support for different LLM providers and models.
 - Implement a feature to save and load custom prompt templates.
 - Add pagination for scenario history to improve performance with large datasets.
-- Implement a more advanced filtering and sorting system for scenarios.
+- Enhance the filtering and sorting system for scenarios with more options and better performance.
 
 For any questions or contributions, please contact the project maintainers.
